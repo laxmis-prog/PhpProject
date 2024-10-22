@@ -6,7 +6,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 // Define the base URL of your website
-$baseURL = 'http://localhost/Project/'; // Replace with your actual base URL
+$baseURL = 'http://localhost/PhpProject/'; // Replace with your actual base URL
 
 // Include database connection
 include('config.php');
