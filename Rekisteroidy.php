@@ -1,4 +1,5 @@
 <?php
+
 // Load Composer's autoloader
 require 'vendor/autoload.php';
 
@@ -10,6 +11,7 @@ $baseURL = 'http://localhost/PhpProject/'; // Replace with your actual base URL
 
 // Include database connection
 include('config.php');
+
 
 // Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
