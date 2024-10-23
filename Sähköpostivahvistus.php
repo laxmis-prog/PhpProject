@@ -1,5 +1,10 @@
 <?php
-include "db_connect.php";
+
+// Enable error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+include "config.php";
 
 // Check if the email is set in the URL
 if (isset($_GET['email'])) {
@@ -11,35 +16,42 @@ if (isset($_GET['email'])) {
     $stmt->execute();
     $result = $stmt->get_result();
 
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
 
-    if ($row['status'] === 'confirmed') {
-        $message = "Sähköpostisi on jo vahvistettu.";
-    } else {
-        // Update the user's status to 'confirmed'
-        $stmt = $conn->prepare("UPDATE users SET status = 'confirmed' WHERE email = ?");
-        $stmt->bind_param("s", $sähköposti);
-        if ($stmt->execute()) {
-            $message = "Sähköpostisi on vahvistettu onnistuneesti.";
+        // Debugging: Print the $row array
+        echo "<pre>";
+        print_r($row);
+        echo "</pre>";
+
+        if (isset($row['status']) && $row['status'] === 'verified') {
+            $message = "Sähköpostisi on jo vahvistettu.";
         } else {
-            $message = "Virhe sähköpostin vahvistamisessa.";
+            // Update the user's status to 'verified'
+            $stmt = $conn->prepare("UPDATE users SET status = 'verified' WHERE email = ?");
+            $stmt->bind_param("s", $sähköposti);
+            if ($stmt->execute()) {
+                $message = "Sähköpostisi on vahvistettu onnistuneesti.";
+            } else {
+                $message = "Virhe sähköpostin vahvistamisessa.";
+            }
         }
+    } else {
+        $message = "Sähköpostia ei löytynyt.";
     }
+
+    $stmt->close();
+    $conn->close();
+
+    echo $message;
+
+    // Redirect to kirjaudu.php
+    header("Location: http://localhost/PhpProject/kirjaudu.php");
+    exit;
 } else {
-    $message = "Sähköpostia ei löytynyt.";
+    echo "Sähköpostiosoitetta ei ole asetettu.";
 }
-
-$stmt->close();
-} else {
-$message = "Sähköpostiosoitetta ei ole asetettu.";
-}
-
-$conn->close();
-?>       
-
-
-
+?>
 
 
 <!DOCTYPE html>

@@ -7,21 +7,27 @@ error_reporting(E_ALL);
 include "config.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    // Sanitize user inputs (additional layer of security)
+    $email = htmlspecialchars(trim($_POST['email']));
+    $password = htmlspecialchars(trim($_POST['password']));
 
     // Look for the email in the Users table
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?"); 
-    $stmt->bind_param("s", $email); 
-    $stmt->execute(); 
-    $result = $stmt->get_result(); 
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
 
-        // Check if the user is confirmed
-        if ($user['status'] != 'confirmed') {
-            echo "Sähköpostia ei ole vahvistettu.";
+        // Debugging: Print the $user array
+        echo "<pre>";
+        print_r($user);
+        echo "</pre>";
+
+        // Check if the user's status is 'verified'
+        if ($user['status'] !== 'verified') {
+            echo "Sähköpostia ei ole vahvistettu."; // Email is not verified
             exit;
         }
 
@@ -29,11 +35,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $user['password'])) {
             // Password is correct, start a session and log the user in
             session_start();
-            $_SESSION['user_id'] = $user['id'];
+            // Regenerate session ID for security
+            session_regenerate_id(true);
+
+            $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['email'] = $user['email'];
             echo "Login successful!";
+
             // Redirect to a protected page
-            header("Location: protected_page.php");
+            header("Location: index.php");
             exit;
         } else {
             echo "Invalid password.";
