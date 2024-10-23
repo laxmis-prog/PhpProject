@@ -1,7 +1,12 @@
 <?php
 
+// Enable error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Load Composer's autoloader
 require 'vendor/autoload.php';
+
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -19,7 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sähköposti = $_POST['email'];
     $salasana = $_POST['password'];
     $vahvistasalasana = $_POST['confirmPassword'];
-
+    
+  
     // Server-side validation
     if ($salasana !== $vahvistasalasana) {
         echo "Salasanat eivät täsmää.";
@@ -37,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Check if the email is already registered
-    $stmt = $conn->prepare("SELECT * FROM Users WHERE email = ?");
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->bind_param("s", $sähköposti);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -48,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Store the submitted data in the database
-    $stmt = $conn->prepare("INSERT INTO Users (username, email, password) VALUES (?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
     $stmt->bind_param("sss", $käyttäjänimi, $sähköposti, password_hash($salasana, PASSWORD_DEFAULT));
 
     if ($stmt->execute()) {
@@ -70,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mail->addAddress($sähköposti, $käyttäjänimi); // Add the user's email and name
 
             // Construct the confirmation link
-            $confirmationLink = $baseURL . 'Kirjaudu.php?email=' . urlencode($sähköposti);
+            $confirmationLink = $baseURL . 'Sähköpostivahvistus.php?email=' . urlencode($sähköposti);
 
             // Content
             $mail->isHTML(true); // Set email format to HTML
@@ -146,5 +152,4 @@ $conn->close();
 
     <script src="validation1.js"></script>
 </body>
-
 </html>
