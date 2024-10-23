@@ -52,6 +52,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "No user found with that email address.";
     }
 }
+
+
+// Check for remember token
+if (isset($_COOKIE['remember_token'])) {
+    $token = $_COOKIE['remember_token'];
+    $stmt = $conn->prepare("SELECT * FROM users WHERE remember_token = ?");
+    $stmt->bind_param("s", $token);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+        session_start();
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['email'] = $user['email'];
+        header("Location: protected_page.php");
+        exit;
+    }
+}
+
+
 ?>
 
 
