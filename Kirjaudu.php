@@ -71,8 +71,6 @@ if (isset($_COOKIE['remember_token'])) {
         exit;
     }
 }
-
-
 ?>
 
 
@@ -110,7 +108,7 @@ if (isset($_COOKIE['remember_token'])) {
             </div>
             <button type="submit" class="btn btn-primary">Kirjaudu sisään</button>
         </form>
-        <a href="unohdit_salasana.php">Unohditko salasanasi?</a>
+        <a href="forgot_password.php">Unohditko salasanasi?</a>
     </div>
 
     <?php include 'footer.php'; ?>
