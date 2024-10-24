@@ -5,6 +5,13 @@ error_reporting(E_ALL);
 
 include "config.php";
 
+// Load Composer's autoloader
+require 'vendor/autoload.php';
+
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $token = $_POST['token'];
     $new_password = $_POST['new_password'];
@@ -17,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Look for the token in the Users table
     $stmt = $conn->prepare("SELECT * FROM users WHERE reset_token = ? AND reset_expires >= ?");
-    $stmt->bind_param("si", $token, date("U"));
+    $stmt->bind_param("si", $token, time());
     $stmt->execute();
     $result = $stmt->get_result();
 

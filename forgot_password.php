@@ -4,6 +4,10 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 include "config.php";
+require 'vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
@@ -17,23 +21,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
         $token = bin2hex(random_bytes(16));
-        $expires = date("U") + 1800; // Token expires in 30 minutes
+        $expires = time() + 1800; // Token expires in 30 minutes
 
         // Store the token and expiration time in the database
         $stmt = $conn->prepare("UPDATE users SET reset_token = ?, reset_expires = ? WHERE email = ?");
         $stmt->bind_param("sis", $token, $expires, $email);
         $stmt->execute();
 
-        // Send the reset link to the user's email
+        // Send the reset link to the user's email using PHPMailer
         $reset_link = "http://localhost/PhpProject/reset_password.php?token=" . $token;
         $subject = "Password Reset Request";
-        $message = "Click the following link to reset your password: " . $reset_link;
-        $headers = "From: no-reply@yourdomain.com";
+        $message = "Click the following link to reset your password: <a href='" . $reset_link . "'>" . $reset_link . "</a>";
 
-        if (mail($email, $subject, $message, $headers)) {
-            echo "A password reset link has been sent to your email.";
-        } else {
-            echo "Failed to send the password reset link.";
+        $mail = new PHPMailer(true);
+
+        try {
+            // Server settings
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com'; // Set your SMTP server here
+            $mail->SMTPAuth = true;
+            $mail->Username = 'lixmihei@gmail.com'; // SMTP username
+            $mail->Password =  'siga kwwq ndjj gtsk';// SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+
+            // Recipients
+            $mail->setFrom('lixmihei@gmail.com', 'Mailer');
+            $mail->addAddress($email);
+
+            // Content
+            $mail->isHTML(true);
+            $mail->Subject = $subject;
+            $mail->Body    = $message;
+
+            $mail->send();
+            echo 'A password reset link has been sent to your email.';
+        } catch (Exception $e) {
+            echo "Failed to send the password reset link. Mailer Error: {$mail->ErrorInfo}";
+            error_log("PHPMailer Error: {$mail->ErrorInfo}");
         }
     } else {
         echo "No user found with that email address.";
