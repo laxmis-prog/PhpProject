@@ -32,7 +32,6 @@ $conn->close();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <?php include 'head.php'; ?>
 
     <div class="container content">
         <h1>Tervetuloa, <?php echo htmlspecialchars($user['username']); ?>!</h1>

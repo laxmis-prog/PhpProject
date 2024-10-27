@@ -5,13 +5,6 @@ error_reporting(E_ALL);
 
 include "config.php";
 
-// Load Composer's autoloader
-require 'vendor/autoload.php';
-
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $token = $_POST['token'];
     $new_password = $_POST['new_password'];
