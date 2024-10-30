@@ -53,24 +53,9 @@ $conn->close();
     </style>
 </head>
 <body>
-
-    <div class="container-fluid">
+<div class="container-fluid">
         <div class="row">
-            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-                <div class="position-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="index.php">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="wellness_tracker.php">Wellness Tracker</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="feedback.php">Feedback</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+            <?php include 'sidebar.php'; ?>
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <h2>Feedback</h2>
@@ -104,6 +89,5 @@ $conn->close();
             </main>
         </div>
     </div>
-
 </body>
 </html>

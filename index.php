@@ -36,29 +36,15 @@ $conn->close();
    
 <div class="container-fluid">
         <div class="row">
-            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-                <div class="position-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="wellness_tracker.php">Wellness Tracker</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="feedback.php">Feedback</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+            <?php include 'sidebar.php'; ?>
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <h1>Tervetuloa, <?php echo htmlspecialchars($user['username']); ?>!</h1>
                 <p>Tämä on suojattu sivu, johon pääsee vain kirjautuneet käyttäjät.</p>
                 <p>Sähköposti: <?php echo htmlspecialchars($user['email']); ?></p>
                 <p>Rooli: <?php echo htmlspecialchars($user['role']); ?></p>
-                <a href="logout.php" class="btn btn-danger">Kirjaudu ulos</a>
             </main>
         </div>
     </div>
-
-   
 </body>
 </html>
