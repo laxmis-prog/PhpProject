@@ -86,7 +86,6 @@ if (isset($_COOKIE['remember_token'])) {
 </head>
 
 <body>
-    <?php include 'head.php'; ?>
 
     <div class="container content">
         <h1>Kirjaudu sisään</h1>
@@ -110,8 +109,6 @@ if (isset($_COOKIE['remember_token'])) {
         </form>
         <a href="forgot_password.php">Unohditko salasanasi?</a>
     </div>
-
-    <?php include 'footer.php'; ?>
 </body>
 
 </html>

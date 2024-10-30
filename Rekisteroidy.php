@@ -114,7 +114,7 @@ $conn->close();
 </head>
 
 <body>
-    <?php include 'head.php'; ?>
+    
 
     <div class="container content">
         <h1>Rekisteröidy</h1>
@@ -147,8 +147,6 @@ $conn->close();
     <div class="confirmation-link mt-3">
         <p>Rekisteröitymisen jälkeen, ole hyvä ja <a href="Kirjaudu.php">tarkista sähköpostisi vahvistusta varten</a>.</p>
     </div>
-
-    <?php include 'footer.php'; ?>
 
     <script src="validation1.js"></script>
 </body>
